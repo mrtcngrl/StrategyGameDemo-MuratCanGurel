@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50097f9bcb07468c9ab8628adc9ee91c, type: 3}
   m_Name: Barracks
   m_EditorClassIdentifier: 
-  _tag: 
-  _size: {x: 0, y: 0}
-  _health: 0
-  _prefab: {fileID: 0}
+  _tag: barracks
+  _size: {x: 4, y: 4}
+  _health: 100
+  _prefab: {fileID: 6487746766337674826, guid: a609ebcb15bb9644c9d05408f4e95790, type: 3}

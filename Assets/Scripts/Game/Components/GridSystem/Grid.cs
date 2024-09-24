@@ -35,12 +35,6 @@ public class Grid
         if(x >= 0 && y >= 0 && x < width && y < height)
             IsOccupied[x, y] = value;
     }
-    
-    public void GetValue(Vector3 worldPosition)
-    {
-        return;
-    }
-
     public bool IsValidGridPosition(Vector3 worldPosition, out int x, out int y)
     {
         GetXY(worldPosition, out x, out y);

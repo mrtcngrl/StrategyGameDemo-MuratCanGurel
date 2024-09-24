@@ -19,9 +19,9 @@ namespace Game.Components.GridSystem
         private void CreateGrid()
         {
             _grid = new Grid(_width, _height, _cellSize);
-            for (int x = 0; x < 10; x++)
+            for (int x = 0; x < _width; x++)
             {
-                for (int y = 0; y < 10; y++)
+                for (int y = 0; y < _height; y++)
                 {
                     var tile = Instantiate(_tile, Vector3.zero, Quaternion.identity, transform);
                     tile.transform.localPosition = _grid.GetWorldPosition(x, y);
