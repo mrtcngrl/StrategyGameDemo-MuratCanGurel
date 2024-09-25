@@ -15,10 +15,11 @@ namespace Game.Components.BuildingSystem.Buildings
         [SerializeField] protected ProductionItem Properties;
         [SerializeField] private SpriteRenderer SurfaceRenderer;
         private int _health;
-        private List<Vector2Int> _placedGridPositions = new();
+        protected List<Vector2Int> PlacedGridPositions = new();
         public Vector2Int Size => Properties.Size;
         public int Health => _health;
-        protected void Initialize(int health)
+        
+        public virtual void Initialize(int health)
         {
             _health = health;
         }
@@ -32,9 +33,9 @@ namespace Game.Components.BuildingSystem.Buildings
             }
         }
 
-        public void OnDestroyed()
+        public virtual void OnDestroyed()
         {
-            throw new NotImplementedException();
+            MonoPool.Instance.ReturnToPool(Properties.ProductName, gameObject);
         }
 
  
@@ -49,16 +50,30 @@ namespace Game.Components.BuildingSystem.Buildings
             transform.position = candidatePosition;
         }
 
-        public void OnPlace(Vector3 placedPosition, List<Vector2Int> placedGridPositions)
+        public void OnPlace(Vector3 placedPosition, List<Vector2Int> placedGridPositions, int health)
         {
             transform.position = placedPosition;
-            _placedGridPositions.Clear();
-            _placedGridPositions = placedGridPositions.ToList();
+            PlacedGridPositions.Clear();
+            PlacedGridPositions = placedGridPositions.ToList();
+            Initialize(health);
         }
 
         public void IsPlaceable(bool key)
         {
             SurfaceRenderer.material.color = key ? Color.green : Color.red;
+        }
+        public virtual  List<Vector2Int> GetBuildingGridPointList(Vector2Int center)
+        {
+            List<Vector2Int> gridPointList = new List<Vector2Int>();
+            for (int i = 0; i < Size.x; i++)
+            {
+                for (int j = 0; j < Size.y; j++)
+                {
+                    gridPointList.Add(center + new Vector2Int(i, j));
+                }
+            }
+
+            return gridPointList;
         }
     }
 }

@@ -34,7 +34,6 @@ public class Grid
     {
         if(x >= 0 && y >= 0 && x < width && y < height)
             IsOccupied[x, y] = value;
-        Debug.LogError($"{x},{y} => {value.name}");
     }
     public bool IsValidGridPosition(Vector3 worldPosition, out int x, out int y)
     {

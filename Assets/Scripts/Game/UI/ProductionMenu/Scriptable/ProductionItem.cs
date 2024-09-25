@@ -1,4 +1,5 @@
 using Game.Components.BuildingSystem;
+using Game.Components.SoldierSystem;
 using Game.UI.ProductionMenu.Interface;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -24,7 +25,7 @@ namespace Game.UI.ProductionMenu.Scriptable
         {
             if (isMilitaryUnit)
             {
-                
+                SoldierPlacer.Instance.TryToProduce(this);
             }
             else
             {

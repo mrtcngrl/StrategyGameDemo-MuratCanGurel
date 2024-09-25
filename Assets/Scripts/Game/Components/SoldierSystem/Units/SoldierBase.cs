@@ -1,3 +1,4 @@
+using Game.Components.BuildingSystem.Buildings;
 using Game.Components.Interface;
 using Game.UI.ProductionMenu.Interface;
 using UnityEngine;
@@ -8,10 +9,12 @@ namespace Game.Components.SoldierSystem.Units
     {
         private int _health;
         public int Health => _health;
-
-        public void Initialize(int health)
+        private Barracks _currentBarracks;
+        public void Initialize(int health, Barracks barracks)
         {
             _health = health;
+            barracks.SetSoldier(this);
+            
         }
         public void OnHit(int damage)
         {
@@ -20,6 +23,7 @@ namespace Game.Components.SoldierSystem.Units
 
         public void OnDestroyed()
         {
+            _currentBarracks = null;
             throw new System.NotImplementedException();
         }
     }
