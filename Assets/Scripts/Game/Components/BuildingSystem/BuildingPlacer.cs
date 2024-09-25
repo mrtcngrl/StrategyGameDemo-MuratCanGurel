@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Game.Components.BuildingSystem.Buildings;
 using Game.Components.BuildingSystem.Scriptable;
 using Game.Pool;
+using Game.UI.ProductionMenu;
+using Game.UI.ProductionMenu.Scriptable;
 using Scripts.Helpers;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -41,11 +43,11 @@ namespace Game.Components.BuildingSystem
             _camera = Camera.main;
         }
 
-        public void TryToSpawnNewBuilding(BuildingProperties buildingProperties)
+        public void TryToSpawnNewBuilding(ProductionItem buildingProperties)
         {
             if (_currentBuilding != null) return;
             _currentBuilding =
-                MonoPool.Instance.SpawnObject<BuildingBase>(buildingProperties.Tag, Vector3.zero, Quaternion.identity);
+                MonoPool.Instance.SpawnObject<BuildingBase>(buildingProperties.ProductName, Vector3.zero, Quaternion.identity);
             _currentBuildingSize = _currentBuilding.Size;
         }
 

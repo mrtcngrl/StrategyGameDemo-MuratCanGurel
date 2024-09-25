@@ -2,36 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Components.BuildingSystem.Scriptable;
+using Game.Components.Interface;
 using Game.Pool;
+using Game.UI.ProductionMenu.Scriptable;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Game.Components.BuildingSystem.Buildings
 {
-    public class BuildingBase : MonoBehaviour
+    public class BuildingBase : MonoBehaviour, IHittable
     {
-        [SerializeField] protected BuildingProperties Properties;
+        [SerializeField] protected ProductionItem Properties;
         [SerializeField] private SpriteRenderer SurfaceRenderer;
         private int _health;
         private List<Vector2Int> _placedGridPositions = new();
         public Vector2Int Size => Properties.Size;
-        protected void Initialize()
+        public int Health => _health;
+        protected void Initialize(int health)
         {
-            _health = Properties.Health;
+            _health = health;
         }
-
-        protected void OnHit(int damage)
+        
+        public void OnHit(int damage)
         {
             _health = damage;
             if (_health <= 0)
             {
-               Demolish();
+                Demolish();
             }
         }
 
-        protected void Demolish()
+        public void OnDestroyed()
         {
-            MonoPool.Instance.ReturnToPool(Properties.Tag, gameObject);
+            throw new NotImplementedException();
+        }
+
+ 
+
+        private void Demolish()
+        {
+            MonoPool.Instance.ReturnToPool(Properties.ProductName, gameObject);
         }
 
         public virtual void OnDrag(Vector2 candidatePosition)

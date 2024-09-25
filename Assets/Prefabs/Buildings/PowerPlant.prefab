@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6487746764622074206}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 2, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_LocalPosition: {x: 1, y: 1.5, z: 0}
+  m_LocalScale: {x: 2, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6487746766337674825}
@@ -93,9 +93,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6487746766337674825}
-  - component: {fileID: -8670523151692349308}
+  - component: {fileID: 3794370744565639711}
   m_Layer: 0
-  m_Name: Barracks
+  m_Name: PowerPlant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,7 +118,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8670523151692349308
+--- !u!114 &3794370744565639711
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,10 +127,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6487746766337674826}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b37aec2fd5df4e419fd303a8a8f0d66c, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ac8818a121846f2b45a9d4923f6cf85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Properties: {fileID: 11400000, guid: 0c88bbbceccd31045ae3a67ad158ba28, type: 2}
+  Properties: {fileID: 11400000, guid: 683fa9550d7e4b44b8ee4efb006b4da7, type: 2}
   SurfaceRenderer: {fileID: 6487746764622074204}
 --- !u!1 &8309744621350525205
 GameObject:
@@ -157,8 +157,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8309744621350525205}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.9821, y: 2.0302, z: 0}
-  m_LocalScale: {x: 0.77140754, y: 1, z: 1}
+  m_LocalPosition: {x: 1, y: 1.5, z: 0}
+  m_LocalScale: {x: 0.2737489, y: 0.35400558, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6487746766337674825}
@@ -205,7 +205,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: c2a60328b41590b4590ec85a18197003, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4c14bb07a70ad55468ea708711365903, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

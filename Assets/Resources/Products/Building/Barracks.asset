@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50097f9bcb07468c9ab8628adc9ee91c, type: 3}
+  m_Script: {fileID: 11500000, guid: 794db073697a4d7cba2e31c0251bffd3, type: 3}
   m_Name: Barracks
   m_EditorClassIdentifier: 
-  _tag: barracks
+  _productName: Barracks
+  icon: {fileID: 21300000, guid: c2a60328b41590b4590ec85a18197003, type: 3}
   _size: {x: 4, y: 4}
-  _health: 100
-  _prefab: {fileID: 6487746766337674826, guid: a609ebcb15bb9644c9d05408f4e95790, type: 3}
-  _icon: {fileID: 21300000, guid: c2a60328b41590b4590ec85a18197003, type: 3}
+  isMilitaryUnit: 0
