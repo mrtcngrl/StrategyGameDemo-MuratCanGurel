@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Game.Components.PathFindingSystem;
+using Game.Components.GridSystem.PathFindingSystem;
 using UnityEngine;
 
 namespace Game.Components.GridSystem
@@ -54,6 +54,11 @@ public class Grid
     public Node GetNodeByWorldPos(Vector3 worldPosition)
     {
         GetXY(worldPosition, out int x, out int y);
+        return IsValidGridXY(x, y) ? nodeArray[x, y] : null;
+    }
+
+    public Node GetNodeByXY(int x, int y)
+    {
         return IsValidGridXY(x, y) ? nodeArray[x, y] : null;
     }
 

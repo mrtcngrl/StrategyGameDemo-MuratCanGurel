@@ -38,7 +38,7 @@ namespace Game.Components.SoldierSystem
             {
                  SoldierBase soldier = MonoPool.Instance.SpawnObject<SoldierBase>(product.ProductName, availableBarrack.SoldierSpawnPosition,
                     Quaternion.identity);
-                 soldier.Initialize(product.Health, availableBarrack);
+                 soldier.Initialize(product, availableBarrack);
             }
             else
             {

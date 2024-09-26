@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Game.UI.ProductionMenu.Scriptable;
 using UnityEngine;
 
 namespace Game.UI.ProductionMenu.Interface
@@ -9,6 +11,8 @@ namespace Game.UI.ProductionMenu.Interface
         Sprite Icon { get; }
         Vector2Int Size { get; }
         bool IsMilitaryUnit { get; }
+        List<ProductionItem> Products { get; }
         void TryProduce();
+        
     }
 }

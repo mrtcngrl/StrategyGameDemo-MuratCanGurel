@@ -6,15 +6,14 @@ namespace Game.Components.GridSystem
     public interface IGridObject
     {
         bool Available { get; }
-        Vector2Int Center { get; }
         Vector2Int Size { get; }
-        void GetNeighbours();
+        Vector3 WorldPosition { get; }
         void OnSelect();
-        bool CanMove { get; }
     }
 
     public interface IMilitaryUnit : IGridObject
     {
-        void Attack(IGridObject target);
+        int Damage { get; }
+        void MoveAndAttack(IGridObject gridObject);
     }
 }

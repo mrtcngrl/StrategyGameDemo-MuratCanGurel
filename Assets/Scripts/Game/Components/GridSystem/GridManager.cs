@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Game.Components.BuildingSystem;
-using Game.Components.PathFindingSystem;
+using Game.Components.GridSystem.PathFindingSystem;
 using Scripts.Helpers;
 using UnityEngine;
 
@@ -17,8 +15,6 @@ namespace Game.Components.GridSystem
         [SerializeField] private BuildingPlacer _buildingPlacer;
         [SerializeField] private PathFinding _pathFinding;
         private Grid _grid;
-        public GameObject seeker, target;
-
         public Grid Grid => _grid;
         private void Awake()
         {
@@ -35,11 +31,7 @@ namespace Game.Components.GridSystem
             _buildingPlacer.Initialize(_grid);
             _pathFinding.Initialize(_grid);
         }
-
-        private void Update()
-        {
-            _pathFinding.FindPath(seeker.transform.position, target.transform.position);
-        }
+        
 
         private void CreateGrid()
         {

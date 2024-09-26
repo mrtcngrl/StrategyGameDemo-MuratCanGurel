@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Components.GridSystem;
 using Game.Components.Interface;
-using Game.Controllers;
 using Game.Pool;
 using Game.UI.ProductionMenu.Scriptable;
 using UnityEngine;
@@ -22,17 +20,12 @@ namespace Game.Components.BuildingSystem.Buildings
         
         #region IGridObject Properties
 
-        public bool Available => _health >= 0;
+        public bool Available => _health >= 0 && _isPlaced;
         public Vector2Int Center => _center;
         public Vector2Int Size => Properties.Size;
+        public Vector3 WorldPosition => transform.position;
         public List<Vector2Int> GridPoints => PlacedGridPoints;
-
-        public bool CanMove => true;
-        public void GetNeighbours()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         #endregion
         
         protected virtual void Initialize(int health)
@@ -43,25 +36,20 @@ namespace Game.Components.BuildingSystem.Buildings
         
         public void OnHit(int damage)
         {
-            _health = damage;
+            _health -= damage;
             if (_health <= 0)
             {
-                Demolish();
+                OnDestroyed();
             }
         }
 
         public virtual void OnDestroyed()
         {
-            MonoPool.Instance.ReturnToPool(Properties.ProductName, gameObject);
-        }
-
- 
-
-        private void Demolish()
-        {
+            Debug.Log("Yıkıldım");
             GridManager.Instance.ClearPoints(PlacedGridPoints);
             MonoPool.Instance.ReturnToPool(Properties.ProductName, gameObject);
         }
+        
 
         public virtual void OnDrag(Vector2 candidatePosition)
         {
@@ -95,7 +83,10 @@ namespace Game.Components.BuildingSystem.Buildings
         }
         public void OnSelect()
         {
-            throw new NotImplementedException();
+            if (Available)
+            {
+                GameConstants.OnProductSelected?.Invoke(Properties);
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
+using System.Collections.Generic;
 using Game.Components.BuildingSystem;
 using Game.Components.SoldierSystem;
 using Game.UI.ProductionMenu.Interface;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Game.UI.ProductionMenu.Scriptable
 {
@@ -14,13 +14,21 @@ namespace Game.UI.ProductionMenu.Scriptable
         [SerializeField] private int _health;
         [SerializeField] private Vector2Int _size;
         [SerializeField] private bool isMilitaryUnit;
+        [SerializeField] private List<ProductionItem> _products = new();
 
         // IProduct Arayüzü Uygulamaları
+
+        #region IProduct Properties
+
         public string ProductName => _productName;
         public Sprite Icon => icon;
         public int Health => _health;
         public Vector2Int Size => _size;
         public bool IsMilitaryUnit => isMilitaryUnit;
+        public List<ProductionItem> Products => _products;
+
+        #endregion
+        
         public void TryProduce()
         {
             if (isMilitaryUnit)
@@ -32,5 +40,7 @@ namespace Game.UI.ProductionMenu.Scriptable
                 BuildingPlacer.Instance.TryToSpawnNewBuilding(this);
             }
         }
+
+        
     }
 }

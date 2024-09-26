@@ -1,7 +1,7 @@
 using Game.Components.GridSystem;
 using UnityEngine;
 
-namespace Game.Components.PathFindingSystem
+namespace Game.Components.GridSystem.PathFindingSystem
 {
     public class Node
     {

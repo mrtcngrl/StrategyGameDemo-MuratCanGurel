@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Components.GridSystem;
 using Scripts.Helpers;
 using UnityEngine;
-using Grid = Game.Components.GridSystem.Grid;
 
-namespace Game.Components.PathFindingSystem
+namespace Game.Components.GridSystem.PathFindingSystem
 {
     public class PathFinding : MonoBehaviour
     {
@@ -26,10 +23,19 @@ namespace Game.Components.PathFindingSystem
             _grid = grid;
         }
 
-        public List<Node> FindPath(Vector3 startPosition, Vector3 targetPosition)
+        public List<Node> FindPath(Vector3 startPosition,Vector3 targetPosition , IGridObject targetGridObject = null)
         {
             Node startNode = _grid.GetNodeByWorldPos(startPosition);
             Node targetNode = _grid.GetNodeByWorldPos(targetPosition);
+            if (!targetNode.Walkable && targetGridObject != null)
+            {
+                targetNode = GetNearestWalkableNodeAroundBuilding(startPosition,targetNode, targetGridObject.Size.x, targetGridObject.Size.y);
+                if (targetNode == null)
+                {
+                    Debug.LogError("Binanın çevresinde yürünebilir bir komşu bulunamadı.");
+                    return null; 
+                }
+            }
             if (startNode == null || targetNode == null) return null;
             List<Node> openSet = new List<Node>();
             HashSet<Node> closedSet = new HashSet<Node>();
@@ -93,6 +99,54 @@ namespace Game.Components.PathFindingSystem
             if (distX > distY)
                 return 14 * distY + 10 * (distX - distY);
             return 14 * distX + 10 * (distY - distX);
+        }
+        
+        private Node GetNearestWalkableNodeAroundBuilding(Vector3 startPosition, Node targetNode, int buildingWidth, int buildingHeight)
+        {
+            List<Node> surroundingNodes = new List<Node>();
+
+            int startX = targetNode.GridXY.x - 1;
+            int endX = targetNode.GridXY.x + buildingWidth;
+            int startY = targetNode.GridXY.y - 1;
+            int endY = targetNode.GridXY.y + buildingHeight;
+
+            for (int x = startX; x <= endX; x++)
+            {
+                for (int y = startY; y <= endY; y++)
+                {
+                    // Kenarları kontrol et
+                    if (x == startX || x == endX || y == startY || y == endY)
+                    {
+                        Node node = _grid.GetNodeByXY(x, y);
+                        if (node != null)
+                        {
+                            if (node.Walkable)
+                            {
+                                surroundingNodes.Add(node);
+                            }
+                        }
+                    }
+                }
+            }
+
+            Node bestNode = null;
+            int shortestPathCost = int.MaxValue;
+
+            foreach (var node in surroundingNodes)
+            {
+                List<Node> pathToNode = FindPath(startPosition, node.WorldPosition);
+
+                if (pathToNode != null)
+                {
+                    int currentCost = pathToNode.Sum(n => n.FCost);
+                    if (currentCost < shortestPathCost)
+                    {
+                        shortestPathCost = currentCost;
+                        bestNode = node;
+                    }
+                }
+            }
+            return bestNode;
         }
     }
 }
