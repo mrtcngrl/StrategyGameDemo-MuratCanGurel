@@ -16,11 +16,11 @@ namespace Game.Components.BuildingSystem.Buildings
         public bool CanProduceSoldier => _currentSoldier == null;
         public Vector3 SoldierSpawnPosition => _soldierSpawnPosition;
         
-        public override void Initialize(int health)
+        protected override void Initialize(int health)
         {
             base.Initialize(health);
             SoldierPlacer.Instance.AddBarracks(this);
-            _soldierSpawnPoint = PlacedGridPositions.Last();
+            _soldierSpawnPoint = PlacedGridPoints.Last();
             _soldierSpawnPosition = GridManager.Instance.GetWorldPosition(_soldierSpawnPoint.x, _soldierSpawnPoint.y);
         }
 

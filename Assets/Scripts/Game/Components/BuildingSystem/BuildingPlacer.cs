@@ -63,7 +63,7 @@ namespace Game.Components.BuildingSystem
                 {
                     Vector2 candidatePosition = _grid.GetWorldPosition(x, y);
                     _currentBuilding.OnDrag(candidatePosition);
-                    _currentBuilding.IsPlaceable(CanPlace(mouseWorldPosition));
+                    _currentBuilding.SetSurfaceColor(CanPlace(mouseWorldPosition));
                     //
                     // if (Input.GetMouseButtonDown(0))
                     // {
@@ -73,7 +73,7 @@ namespace Game.Components.BuildingSystem
                 }
                 else
                 {
-                    _currentBuilding.IsPlaceable(false);
+                    _currentBuilding.SetSurfaceColor(false);
                 }
             }
 
@@ -124,18 +124,15 @@ namespace Game.Components.BuildingSystem
 
             return canPlace;
         }
-
-        
-
         private void PlaceBuilding(List<Vector2Int> gridPositionList, Vector2Int center)
         {
-            _currentBuilding.OnPlace(_grid.GetWorldPosition(center.x, center.y), gridPositionList, _currentBuildingProduct.Health);
+            _currentBuilding.OnPlace(center, _grid.GetWorldPosition(center.x, center.y), gridPositionList, _currentBuildingProduct.Health);
             foreach (var vector2Int in gridPositionList)
             {
-                _grid.SetValue(vector2Int.x, vector2Int.y, _currentBuilding.transform);
+                _grid.SetValue(vector2Int.x, vector2Int.y, false);
             }
-
             _currentBuilding = null;
         }
+        
     }
 }

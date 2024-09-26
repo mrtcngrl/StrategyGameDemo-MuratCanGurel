@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Game.Components.BuildingSystem;
+using Game.Components.PathFindingSystem;
 using Scripts.Helpers;
 using UnityEngine;
 
@@ -11,8 +15,11 @@ namespace Game.Components.GridSystem
         [SerializeField] private float _cellSize;
         [SerializeField] private GameObject _tile;
         [SerializeField] private BuildingPlacer _buildingPlacer;
+        [SerializeField] private PathFinding _pathFinding;
         private Grid _grid;
-        
+        public GameObject seeker, target;
+
+        public Grid Grid => _grid;
         private void Awake()
         {
             if (!object.ReferenceEquals(Instance, null) && !object.ReferenceEquals(Instance, this)) this.Destroy();
@@ -20,12 +27,18 @@ namespace Game.Components.GridSystem
             {
                 Instance = this;
             }
+            CreateGrid();
         }
         
         private void Start()
         {
-            CreateGrid();
             _buildingPlacer.Initialize(_grid);
+            _pathFinding.Initialize(_grid);
+        }
+
+        private void Update()
+        {
+            _pathFinding.FindPath(seeker.transform.position, target.transform.position);
         }
 
         private void CreateGrid()
@@ -44,6 +57,34 @@ namespace Game.Components.GridSystem
         {
             return new Vector3(x, y) * _cellSize;
         }
+        public List<Node> path;
 
+        private void OnDrawGizmos()
+        {
+            if (_grid != null)
+            {
+                foreach (var node in _grid.nodeArray)
+                {
+                    Gizmos.color = node.Walkable ? Color.white : Color.black;
+                    if (path != null)
+                    {
+                        if (path.Contains(node))
+                        {
+                            Gizmos.color = Color.cyan;
+                            Gizmos.DrawCube(node.WorldPosition,Vector2.one);
+                        }
+                    }
+                    Gizmos.DrawCube(node.WorldPosition,Vector2.one);
+                }
+            }
+        }
+
+        public void ClearPoints(List<Vector2Int> gridPointList)
+        {
+            foreach (var vector2Int in gridPointList)
+            {
+                _grid.nodeArray[vector2Int.x, vector2Int.y].Walkable = true;
+            }
+        }
     }
 }
