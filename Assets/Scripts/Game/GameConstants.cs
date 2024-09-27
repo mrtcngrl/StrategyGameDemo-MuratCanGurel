@@ -14,8 +14,11 @@ namespace Game
         public static Action<IHittable> OnUnitDestroyed;
         public static void Initialize()
         {
-            Debug.LogError("Test");
             Selectable = 1 << LayerMask.NameToLayer("Selectable");
         }
+        public static readonly string InvalidBuildLocationMessage = "Invalid build location! Please choose a valid spot on the map";
+        public static readonly string NoBarracksForUnitProductionMessage = "No suitable barracks available for unit production!";
+        public static readonly string BuildingPlacementInProgressMessage = "You cannot place a new building while another is being placed!";
+        public static readonly string NoValidPathForUnitMessage = "No valid path found for the unit!";
     }
 }

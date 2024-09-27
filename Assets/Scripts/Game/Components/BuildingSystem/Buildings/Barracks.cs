@@ -3,6 +3,7 @@ using System.Linq;
 using Game.Components.GridSystem.Managers;
 using Game.Components.SoldierSystem;
 using Game.Components.SoldierSystem.Units;
+using Scripts.Helpers;
 using UnityEngine;
 
 namespace Game.Components.BuildingSystem.Buildings
@@ -20,7 +21,7 @@ namespace Game.Components.BuildingSystem.Buildings
         protected override void Start()
         {
             base.Start();
-            _spawnPointRenderer.sprite = AtlasManager.Instance.GetSprite(GameConstants.SurfaceSpriteName);
+            _spawnPointRenderer.sprite = SpriteHelper.Instance.GetSprite(GameConstants.SurfaceSpriteName);
         }
 
         protected override void Initialize(int health)

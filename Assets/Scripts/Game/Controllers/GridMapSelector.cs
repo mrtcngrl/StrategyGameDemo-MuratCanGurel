@@ -22,6 +22,7 @@ namespace Game.Controllers
             if (Input.GetMouseButtonDown(0))
             {
                 _firstSelection = TryGetGridObject(Input.mousePosition);
+                _firstSelection.OnSelect();
             }
             if (Input.GetMouseButtonDown(1))
             {

@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
+using Game.Signals.Helpers;
 using Scripts.Helpers;
 using UnityEngine;
 using UnityEngine.U2D;
 using Zenject;
+using Random = UnityEngine.Random;
 
-namespace Game.Components
+namespace Scripts.Helpers
 {
-    public class AtlasManager: MonoBehaviour
+    public class SpriteHelper: MonoBehaviour
     {
-        public static AtlasManager Instance;
+        public static SpriteHelper Instance;
         [SerializeField] private SpriteAtlas _spriteAtlas;
         [Inject]
         private void OnInject()

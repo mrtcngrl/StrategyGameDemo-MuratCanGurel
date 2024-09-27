@@ -69,6 +69,7 @@ namespace Game.Components.SoldierSystem.Units
                 _currentBarracks = null;
                
                 _stayedNode = _path.Last();
+                _attackTimer?.Dispose();
                 _movementUpdate = Observable.EveryUpdate().Subscribe(_ => MoveToTarget());
                 _currentHitTarget = gridObject as IHittable;
             }

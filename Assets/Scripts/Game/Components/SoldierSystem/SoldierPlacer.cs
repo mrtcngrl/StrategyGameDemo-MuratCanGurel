@@ -3,6 +3,7 @@ using System.Linq;
 using Game.Components.BuildingSystem.Buildings;
 using Game.Components.SoldierSystem.Units;
 using Game.Pool;
+using Game.Signals.Helpers;
 using Game.UI.ProductionMenu.Scriptable;
 using Scripts.Helpers;
 using UnityEngine;
@@ -42,8 +43,7 @@ namespace Game.Components.SoldierSystem
             }
             else
             {
-                //todo make ui info text
-                Debug.LogError("There are no available barracks!");
+              ShowAlertNotifyHelper.ShowAlert(GameConstants.NoBarracksForUnitProductionMessage);
             }
         }
     }

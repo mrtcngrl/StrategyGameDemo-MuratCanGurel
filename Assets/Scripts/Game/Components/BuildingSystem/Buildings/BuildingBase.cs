@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Components.GridSystem.Interface;
@@ -6,8 +5,8 @@ using Game.Components.GridSystem.Managers;
 using Game.Components.Interface;
 using Game.Pool;
 using Game.UI.ProductionMenu.Scriptable;
+using Scripts.Helpers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Game.Components.BuildingSystem.Buildings
 {
@@ -16,6 +15,7 @@ namespace Game.Components.BuildingSystem.Buildings
         [SerializeField] protected ProductionItem Properties;
         [SerializeField] private SpriteRenderer _modelRenderer;
         [SerializeField] private SpriteRenderer _surfaceRenderer;
+        [SerializeField] private ParticleSystem _hitParticle;
         private int _health;
         private bool _isPlaced;
         private Vector2Int _center;
@@ -35,9 +35,10 @@ namespace Game.Components.BuildingSystem.Buildings
 
         protected virtual void Start()
         {
-            _modelRenderer.sprite = AtlasManager.Instance.GetSprite(Properties.name);
-            _surfaceRenderer.sprite = AtlasManager.Instance.GetSprite(GameConstants.SurfaceSpriteName);
+            _modelRenderer.sprite = SpriteHelper.Instance.GetSprite(Properties.name);
+            _surfaceRenderer.sprite = SpriteHelper.Instance.GetSprite(GameConstants.SurfaceSpriteName);
             _propertyBlock = new MaterialPropertyBlock();
+            SetSurfaceColor(false);
         }
 
         protected virtual void Initialize(int health)
@@ -49,6 +50,7 @@ namespace Game.Components.BuildingSystem.Buildings
         public void OnHit(int damage)
         {
             _health -= damage;
+            _hitParticle.Play();
             if (_health <= 0)
             {
                 OnDestroyed();
@@ -57,7 +59,6 @@ namespace Game.Components.BuildingSystem.Buildings
 
         public virtual void OnDestroyed()
         {
-            Debug.Log("Yıkıldım");
             GridManager.Instance.ClearPoints(PlacedGridPoints);
             MonoPool.Instance.ReturnToPool(Properties.ProductName, gameObject);
         }

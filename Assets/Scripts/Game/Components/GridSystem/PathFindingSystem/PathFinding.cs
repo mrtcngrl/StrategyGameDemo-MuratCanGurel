@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Components.GridSystem.Interface;
+using Game.Signals.Helpers;
 using Scripts.Helpers;
 using UnityEngine;
 using Grid = Game.Components.GridSystem.Core.Grid;
@@ -34,7 +35,7 @@ namespace Game.Components.GridSystem.PathFindingSystem
                 List<Node> bestPath = GetNearestWalkablePathAroundBuilding(startPosition,targetNode, targetGridObject.Size.x, targetGridObject.Size.y);
                 if (bestPath == null)
                 {
-                    Debug.LogError("Binanın çevresinde yürünebilir bir komşu bulunamadı.");
+                    ShowAlertNotifyHelper.ShowAlert(GameConstants.NoValidPathForUnitMessage);
                     return null; 
                 }
 
@@ -79,7 +80,7 @@ namespace Game.Components.GridSystem.PathFindingSystem
                     }
                 }
             }
-
+            ShowAlertNotifyHelper.ShowAlert(GameConstants.NoValidPathForUnitMessage);
             return null;
         }
 
@@ -118,7 +119,6 @@ namespace Game.Components.GridSystem.PathFindingSystem
             {
                 for (int y = startY; y <= endY; y++)
                 {
-                    // Kenarları kontrol et
                     if (x == startX || x == endX || y == startY || y == endY)
                     {
                         Node node = _grid.GetNodeByXY(x, y);

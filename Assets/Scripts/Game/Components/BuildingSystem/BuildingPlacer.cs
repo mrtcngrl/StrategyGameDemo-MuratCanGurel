@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Components.BuildingSystem.Buildings;
 using Game.Pool;
+using Game.Signals.Helpers;
 using Game.UI.ProductionMenu.Scriptable;
 using Scripts.Helpers;
 using UnityEngine;
@@ -41,7 +42,11 @@ namespace Game.Components.BuildingSystem
 
         public void TryToSpawnNewBuilding(ProductionItem buildingProduct)
         {
-            if (_currentBuilding != null) return;
+            if (_currentBuilding != null)
+            {
+                ShowAlertNotifyHelper.ShowAlert(GameConstants.BuildingPlacementInProgressMessage);
+                return;
+            }
             _currentBuildingProduct = buildingProduct;
             _currentBuilding =
                 MonoPool.Instance.SpawnObject<BuildingBase>(_currentBuildingProduct.ProductName, Vector3.zero, Quaternion.identity);
@@ -60,12 +65,6 @@ namespace Game.Components.BuildingSystem
                     Vector2 candidatePosition = _grid.GetWorldPosition(x, y);
                     _currentBuilding.OnDrag(candidatePosition);
                     _currentBuilding.SetSurfaceColor(CanPlace(mouseWorldPosition));
-                    //
-                    // if (Input.GetMouseButtonDown(0))
-                    // {
-                    //     _grid.SetGridPosition(gridPosition, 1); // Mark the grid position as occupied
-                    //     currentBuilding = null; // Reset currentBuilding so another can be placed
-                    // }
                 }
                 else
                 {
@@ -75,7 +74,8 @@ namespace Game.Components.BuildingSystem
 
             if (Input.GetMouseButtonUp(0))
             {
-                if (_currentBuilding == null) return;
+                Vector2 mouseScreenPosition = Input.mousePosition;
+                if (_currentBuilding == null || mouseScreenPosition.IsOverAnyUiElement()) return;
                 Vector3 mouseWorldPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
                 mouseWorldPosition.z = 0;
                 TryToPlace(mouseWorldPosition);
@@ -96,11 +96,19 @@ namespace Game.Components.BuildingSystem
 
         private void TryToPlace(Vector3 mouseWorldPosition)
         {
-            if (!_grid.IsValidGridPosition(mouseWorldPosition, out int x, out int y)) return;
+            if (!_grid.IsValidGridPosition(mouseWorldPosition, out int x, out int y))
+            {
+                ShowAlertNotifyHelper.ShowAlert(GameConstants.InvalidBuildLocationMessage);
+                return;
+            }
             List<Vector2Int> gridPointList = _currentBuilding.GetBuildingGridPointList(_buildingCenter);
             if (CanPlace(mouseWorldPosition))
             {
                 PlaceBuilding(gridPointList, _buildingCenter);
+            }
+            else
+            {
+                ShowAlertNotifyHelper.ShowAlert(GameConstants.InvalidBuildLocationMessage);
             }
         }
 
