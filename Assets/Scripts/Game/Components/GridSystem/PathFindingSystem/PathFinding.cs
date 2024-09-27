@@ -31,12 +31,14 @@ namespace Game.Components.GridSystem.PathFindingSystem
             Node targetNode = _grid.GetNodeByWorldPos(targetPosition);
             if (!targetNode.Walkable && targetGridObject != null)
             {
-                targetNode = GetNearestWalkableNodeAroundBuilding(startPosition,targetNode, targetGridObject.Size.x, targetGridObject.Size.y);
-                if (targetNode == null)
+                List<Node> bestPath = GetNearestWalkablePathAroundBuilding(startPosition,targetNode, targetGridObject.Size.x, targetGridObject.Size.y);
+                if (bestPath == null)
                 {
                     Debug.LogError("Binanın çevresinde yürünebilir bir komşu bulunamadı.");
                     return null; 
                 }
+
+                return bestPath;
             }
             if (startNode == null || targetNode == null) return null;
             List<Node> openSet = new List<Node>();
@@ -103,7 +105,7 @@ namespace Game.Components.GridSystem.PathFindingSystem
             return 14 * distX + 10 * (distY - distX);
         }
         
-        private Node GetNearestWalkableNodeAroundBuilding(Vector3 startPosition, Node targetNode, int buildingWidth, int buildingHeight)
+        private List<Node> GetNearestWalkablePathAroundBuilding(Vector3 startPosition, Node targetNode, int buildingWidth, int buildingHeight)
         {
             List<Node> surroundingNodes = new List<Node>();
 
@@ -130,25 +132,23 @@ namespace Game.Components.GridSystem.PathFindingSystem
                     }
                 }
             }
-
-            Node bestNode = null;
+            
             int shortestPathCost = int.MaxValue;
-
+            List<Node> bestPath = null;
             foreach (var node in surroundingNodes)
             {
                 List<Node> pathToNode = FindPath(startPosition, node.WorldPosition);
-
                 if (pathToNode != null)
                 {
                     int currentCost = pathToNode.Sum(n => n.FCost);
                     if (currentCost < shortestPathCost)
                     {
                         shortestPathCost = currentCost;
-                        bestNode = node;
+                        bestPath = pathToNode.ToList();
                     }
                 }
             }
-            return bestNode;
+            return bestPath;
         }
     }
 }

@@ -47,6 +47,9 @@ namespace Game.Components.SoldierSystem.Units
 
         public int Damage => _damage;
 
+      
+        #endregion
+
         public void MoveAndAttack(IGridObject gridObject)
         {
             _path = PathFinding.Instance.FindPath(transform.position, gridObject.WorldPosition, gridObject);
@@ -70,8 +73,6 @@ namespace Game.Components.SoldierSystem.Units
                 _currentHitTarget = gridObject as IHittable;
             }
         }
-        #endregion
-
         private void TrySetStayedNodeWalkable(bool key)
         {
             if(_stayedNode == null) return;
