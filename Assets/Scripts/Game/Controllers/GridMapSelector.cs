@@ -1,7 +1,7 @@
-using Game.Components.GridSystem;
+using Game.Components.GridSystem.Interface;
 using Game.Components.Interface;
 using UnityEngine;
-using Grid = Game.Components.GridSystem.Grid;
+using Grid = Game.Components.GridSystem.Core.Grid;
 
 namespace Game.Controllers
 {

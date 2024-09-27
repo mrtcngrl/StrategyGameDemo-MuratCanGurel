@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Components.GridSystem;
+using Game.Components.GridSystem.Managers;
 using Game.Components.SoldierSystem;
 using Game.Components.SoldierSystem.Units;
 using UnityEngine;
@@ -9,13 +9,20 @@ namespace Game.Components.BuildingSystem.Buildings
 {
     public class Barracks : BuildingBase
     {
+        [SerializeField] private SpriteRenderer _spawnPointRenderer;
         private SoldierBase _currentSoldier;
         private Vector3 _soldierSpawnPosition;
         private Vector2Int _soldierSpawnPoint;
         
         public bool CanProduceSoldier => _currentSoldier == null;
         public Vector3 SoldierSpawnPosition => _soldierSpawnPosition;
-        
+
+        protected override void Start()
+        {
+            base.Start();
+            _spawnPointRenderer.sprite = AtlasManager.Instance.GetSprite(GameConstants.SurfaceSpriteName);
+        }
+
         protected override void Initialize(int health)
         {
             base.Initialize(health);

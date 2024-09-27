@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Components.GridSystem
+namespace Game.Components.GridSystem.Interface
 {
     public interface IGridObject
     {

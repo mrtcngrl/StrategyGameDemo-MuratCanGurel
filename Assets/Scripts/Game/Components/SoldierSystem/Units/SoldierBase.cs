@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Components.BuildingSystem.Buildings;
-using Game.Components.GridSystem;
+using Game.Components.GridSystem.Interface;
+using Game.Components.GridSystem.Managers;
 using Game.Components.GridSystem.PathFindingSystem;
 using Game.Components.Interface;
 using Game.Pool;
@@ -14,7 +16,6 @@ namespace Game.Components.SoldierSystem.Units
     public class SoldierBase : MonoBehaviour, IHittable, IMilitaryUnit
     {
         [SerializeField] private int _damage;
-        [SerializeField] private Transform target;
         private int _health;
         private Barracks _currentBarracks;
         private IDisposable _movementUpdate;
@@ -23,11 +24,14 @@ namespace Game.Components.SoldierSystem.Units
         private IHittable _currentHitTarget;
         private List<Node> _path = new();
         private IProduct _properties;
+        private Node _stayedNode;
         public void Initialize(IProduct product, Barracks barracks)
         {
             _properties = product;
             _health = _properties.Health;
             barracks.SetSoldier(this);
+            _stayedNode = GridManager.Instance.Grid.GetNodeByWorldPos(WorldPosition);
+            TrySetStayedNodeWalkable(false);
             _currentBarracks = barracks;
         }
         
@@ -45,27 +49,36 @@ namespace Game.Components.SoldierSystem.Units
 
         public void MoveAndAttack(IGridObject gridObject)
         {
-            _path =  PathFinding.Instance.FindPath(transform.position, gridObject.WorldPosition, gridObject);
+            _path = PathFinding.Instance.FindPath(transform.position, gridObject.WorldPosition, gridObject);
             if (_path != null)
             {
+               
+                _currentNodeIndex = 0;
+                if (_path.Count == 0)
+                {
+                    OnTargetReached();
+                    return;
+                }
+                //for spawn point stay Unwalkable
+                TrySetStayedNodeWalkable(_currentBarracks == null);
+                
                 _currentBarracks?.ClearSoldier();
                 _currentBarracks = null;
-                _currentNodeIndex = 0;
+               
+                _stayedNode = _path.Last();
                 _movementUpdate = Observable.EveryUpdate().Subscribe(_ => MoveToTarget());
                 _currentHitTarget = gridObject as IHittable;
             }
         }
         #endregion
-        
-        
+
+        private void TrySetStayedNodeWalkable(bool key)
+        {
+            if(_stayedNode == null) return;
+            _stayedNode.Walkable = key;
+        }
         private void MoveToTarget()
         {
-            if (_path.Count == 0)
-            {
-                OnTargetReached();
-                return;
-            }
-               
             Vector3 targetPosition = _path[_currentNodeIndex].WorldPosition;
             Vector3 direction = (targetPosition - transform.position).normalized;
             transform.position += direction * 3 * Time.deltaTime;
@@ -80,6 +93,7 @@ namespace Game.Components.SoldierSystem.Units
 
         private void OnTargetReached()
         {
+            TrySetStayedNodeWalkable(false);
             _movementUpdate?.Dispose();
             if(_currentHitTarget != null)
                 InitializeAttack();
@@ -112,6 +126,7 @@ namespace Game.Components.SoldierSystem.Units
         
         public void OnDestroyed()
         {
+            TrySetStayedNodeWalkable(true);
             _currentBarracks?.ClearSoldier();
             _currentBarracks = null;
             MonoPool.Instance.ReturnToPool(_properties.ProductName,gameObject);

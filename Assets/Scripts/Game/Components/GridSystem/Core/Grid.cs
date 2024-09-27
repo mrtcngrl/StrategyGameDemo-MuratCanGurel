@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Game.Components.GridSystem.PathFindingSystem;
 using UnityEngine;
 
-namespace Game.Components.GridSystem
+namespace Game.Components.GridSystem.Core
 {
 public class Grid
 {

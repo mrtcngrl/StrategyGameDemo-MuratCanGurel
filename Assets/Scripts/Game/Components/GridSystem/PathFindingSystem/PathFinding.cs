@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Components.GridSystem.Interface;
 using Scripts.Helpers;
 using UnityEngine;
+using Grid = Game.Components.GridSystem.Core.Grid;
 
 namespace Game.Components.GridSystem.PathFindingSystem
 {

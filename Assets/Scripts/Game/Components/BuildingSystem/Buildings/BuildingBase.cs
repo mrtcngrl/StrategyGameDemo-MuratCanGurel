@@ -1,20 +1,25 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Components.GridSystem;
+using Game.Components.GridSystem.Interface;
+using Game.Components.GridSystem.Managers;
 using Game.Components.Interface;
 using Game.Pool;
 using Game.UI.ProductionMenu.Scriptable;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game.Components.BuildingSystem.Buildings
 {
     public class BuildingBase : MonoBehaviour, IHittable, IGridObject
     {
         [SerializeField] protected ProductionItem Properties;
-        [SerializeField] private SpriteRenderer SurfaceRenderer;
+        [SerializeField] private SpriteRenderer _modelRenderer;
+        [SerializeField] private SpriteRenderer _surfaceRenderer;
         private int _health;
         private bool _isPlaced;
         private Vector2Int _center;
+        private MaterialPropertyBlock _propertyBlock;
         protected List<Vector2Int> PlacedGridPoints = new();
         public int Health => _health;
         
@@ -27,7 +32,14 @@ namespace Game.Components.BuildingSystem.Buildings
         public List<Vector2Int> GridPoints => PlacedGridPoints;
         
         #endregion
-        
+
+        protected virtual void Start()
+        {
+            _modelRenderer.sprite = AtlasManager.Instance.GetSprite(Properties.name);
+            _surfaceRenderer.sprite = AtlasManager.Instance.GetSprite(GameConstants.SurfaceSpriteName);
+            _propertyBlock = new MaterialPropertyBlock();
+        }
+
         protected virtual void Initialize(int health)
         {
             _isPlaced = true;
@@ -65,9 +77,12 @@ namespace Game.Components.BuildingSystem.Buildings
             Initialize(health);
         }
 
-        public void SetSurfaceColor(bool key)
+        public void SetSurfaceColor(bool canPlace)
         {
-            SurfaceRenderer.material.color = key ? Color.green : Color.red;
+            _surfaceRenderer.GetPropertyBlock(_propertyBlock);
+            Color color = canPlace ? Color.green : Color.red;
+            _propertyBlock.SetColor("_Color",color);
+            _surfaceRenderer.SetPropertyBlock(_propertyBlock);
         }
         public virtual List<Vector2Int> GetBuildingGridPointList(Vector2Int center)
         {

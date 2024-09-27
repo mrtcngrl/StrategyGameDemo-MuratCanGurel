@@ -4,7 +4,7 @@ using Game.Pool;
 using Game.UI.ProductionMenu.Scriptable;
 using Scripts.Helpers;
 using UnityEngine;
-using Grid = Game.Components.GridSystem.Grid;
+using Grid = Game.Components.GridSystem.Core.Grid;
 
 namespace Game.Components.BuildingSystem
 {

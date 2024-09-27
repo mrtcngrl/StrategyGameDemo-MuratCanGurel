@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Components;
 using Game.Components.BuildingSystem;
 using Game.Components.SoldierSystem;
 using Game.UI.ProductionMenu.Interface;
@@ -21,7 +22,7 @@ namespace Game.UI.ProductionMenu.Scriptable
         #region IProduct Properties
 
         public string ProductName => _productName;
-        public Sprite Icon => icon;
+        public Sprite Icon => AtlasManager.Instance.GetSprite(_productName);
         public int Health => _health;
         public Vector2Int Size => _size;
         public bool IsMilitaryUnit => isMilitaryUnit;

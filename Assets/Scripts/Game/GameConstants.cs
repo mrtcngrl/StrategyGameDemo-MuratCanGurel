@@ -8,6 +8,7 @@ namespace Game
     public static class GameConstants
     {
         public static readonly float AttackInterval = .5f;
+        public static readonly string SurfaceSpriteName = "Surface";
         public static LayerMask Selectable;
         public static Action<IProduct> OnProductSelected;
         public static Action<IHittable> OnUnitDestroyed;

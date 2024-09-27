@@ -131,7 +131,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 11400000, guid: 683fa9550d7e4b44b8ee4efb006b4da7, type: 2}
-  SurfaceRenderer: {fileID: 6487746764622074204}
+  _modelRenderer: {fileID: 9086326411314799709}
+  _surfaceRenderer: {fileID: 6487746764622074204}
 --- !u!1 &8309744621350525205
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,7 +212,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5.2, y: 3.91}
+  m_Size: {x: 7.3, y: 8.45}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -235,7 +236,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 7.3, y: 8.45}
-    newSize: {x: 5.2, y: 3.91}
+    newSize: {x: 7.3, y: 8.45}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
