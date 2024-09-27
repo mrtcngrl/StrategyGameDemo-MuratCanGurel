@@ -7,10 +7,9 @@ namespace ProductionMenu
 {
     public class ProductButton : MonoBehaviour
     {
-        private IProduct _product;
         [SerializeField] private Image _image;
         [SerializeField] private Button _button;
-
+        private IProduct _product;
         public void Initialize(IProduct product)
         {
             _product = product;

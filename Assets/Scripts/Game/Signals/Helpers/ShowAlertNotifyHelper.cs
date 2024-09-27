@@ -1,6 +1,5 @@
 using Game.Signals.Core;
 using Game.Signals.Utils;
-using UnityEngine;
 
 namespace Game.Signals.Helpers
 {

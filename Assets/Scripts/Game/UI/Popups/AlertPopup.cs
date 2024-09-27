@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using Game.Signals.Core;
 using Game.Signals.Utils;
@@ -10,7 +9,7 @@ namespace Game.UI.Popups
     public class AlertPopup : MonoBehaviour
     {
         [SerializeField] private RectTransform _popupRect;
-        [SerializeField] CanvasGroup _canvasGroup;
+        [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private TextMeshProUGUI _alertText;
         private Sequence _anim;
         private void Start()

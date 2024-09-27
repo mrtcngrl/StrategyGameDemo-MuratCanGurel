@@ -14,17 +14,10 @@ namespace Game.Components.BuildingSystem
         public static BuildingPlacer Instance;
         private Camera _camera;
         private Grid _grid;
-        
         private BuildingBase _currentBuilding;
-        private Vector2Int _buildingCenter;
         private ProductionItem _currentBuildingProduct;
+        private Vector2Int _buildingCenter;
         private List<Vector2Int> _buildingGridPoints = new();
-        
-
-        public void Initialize(Grid grid)
-        {
-            _grid = grid;
-        }
 
         private void Awake()
         {
@@ -40,6 +33,12 @@ namespace Game.Components.BuildingSystem
             _camera = Camera.main;
         }
 
+        public void Initialize(Grid grid)
+        {
+            _grid = grid;
+        }
+        
+
         public void TryToSpawnNewBuilding(ProductionItem buildingProduct)
         {
             if (_currentBuilding != null)
@@ -47,10 +46,11 @@ namespace Game.Components.BuildingSystem
                 ShowAlertNotifyHelper.ShowAlert(GameConstants.BuildingPlacementInProgressMessage);
                 return;
             }
+
             _currentBuildingProduct = buildingProduct;
             _currentBuilding =
-                MonoPool.Instance.SpawnObject<BuildingBase>(_currentBuildingProduct.ProductName, Vector3.zero, Quaternion.identity);
-            
+                MonoPool.Instance.SpawnObject<BuildingBase>(_currentBuildingProduct.ProductName, Vector3.zero,
+                    Quaternion.identity);
         }
 
         private void Update()
@@ -71,7 +71,6 @@ namespace Game.Components.BuildingSystem
                     _currentBuilding.SetSurfaceColor(false);
                 }
             }
-
             if (Input.GetMouseButtonUp(0))
             {
                 Vector2 mouseScreenPosition = Input.mousePosition;
@@ -82,15 +81,16 @@ namespace Game.Components.BuildingSystem
             }
         }
 
-        private void SetGridCenterAndGridPoints(int x , int y)
+        private void SetGridCenterAndGridPoints(int x, int y)
         {
             _buildingCenter = new Vector2Int(x, y);
-            _buildingGridPoints  = _currentBuilding.GetBuildingGridPointList(_buildingCenter);
+            _buildingGridPoints = _currentBuilding.GetBuildingGridPointList(_buildingCenter);
         }
+
         private bool CanPlace(Vector3 mouseWorldPosition)
         {
             if (!_grid.IsValidGridPosition(mouseWorldPosition, out int x, out int y)) return false;
-            SetGridCenterAndGridPoints(x,y);
+            SetGridCenterAndGridPoints(x, y);
             return IsPointsAvailable(_buildingGridPoints);
         }
 
@@ -101,6 +101,7 @@ namespace Game.Components.BuildingSystem
                 ShowAlertNotifyHelper.ShowAlert(GameConstants.InvalidBuildLocationMessage);
                 return;
             }
+
             List<Vector2Int> gridPointList = _currentBuilding.GetBuildingGridPointList(_buildingCenter);
             if (CanPlace(mouseWorldPosition))
             {
@@ -122,21 +123,24 @@ namespace Game.Components.BuildingSystem
                 {
                     continue;
                 }
+
                 canPlace = false;
                 break;
             }
 
             return canPlace;
         }
+
         private void PlaceBuilding(List<Vector2Int> gridPositionList, Vector2Int center)
         {
-            _currentBuilding.OnPlace(center, _grid.GetWorldPosition(center.x, center.y), gridPositionList, _currentBuildingProduct.Health);
+            _currentBuilding.OnPlace(center, _grid.GetWorldPosition(center.x, center.y), gridPositionList,
+                _currentBuildingProduct.Health);
             foreach (var vector2Int in gridPositionList)
             {
                 _grid.SetValue(vector2Int.x, vector2Int.y, false);
             }
+
             _currentBuilding = null;
         }
-        
     }
 }

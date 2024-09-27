@@ -21,8 +21,30 @@ namespace Game.Components.BuildingSystem.Buildings
         private Vector2Int _center;
         private MaterialPropertyBlock _propertyBlock;
         protected List<Vector2Int> PlacedGridPoints = new();
+
+
+        #region IHittable Properties
+
         public int Health => _health;
-        
+
+        public void OnHit(int damage)
+        {
+            _health -= damage;
+            _hitParticle.Play();
+            if (_health <= 0)
+            {
+                OnDestroyed();
+            }
+        }
+
+        public virtual void OnDestroyed()
+        {
+            GridManager.Instance.ClearPoints(PlacedGridPoints);
+            MonoPool.Instance.ReturnToPool(Properties.ProductName, gameObject);
+        }
+
+        #endregion
+
         #region IGridObject Properties
 
         public bool Available => _health >= 0 && _isPlaced;
@@ -30,7 +52,7 @@ namespace Game.Components.BuildingSystem.Buildings
         public Vector2Int Size => Properties.Size;
         public Vector3 WorldPosition => transform.position;
         public List<Vector2Int> GridPoints => PlacedGridPoints;
-        
+
         #endregion
 
         protected virtual void Start()
@@ -47,23 +69,6 @@ namespace Game.Components.BuildingSystem.Buildings
             _health = health;
         }
         
-        public void OnHit(int damage)
-        {
-            _health -= damage;
-            _hitParticle.Play();
-            if (_health <= 0)
-            {
-                OnDestroyed();
-            }
-        }
-
-        public virtual void OnDestroyed()
-        {
-            GridManager.Instance.ClearPoints(PlacedGridPoints);
-            MonoPool.Instance.ReturnToPool(Properties.ProductName, gameObject);
-        }
-        
-
         public virtual void OnDrag(Vector2 candidatePosition)
         {
             transform.position = candidatePosition;
@@ -82,9 +87,10 @@ namespace Game.Components.BuildingSystem.Buildings
         {
             _surfaceRenderer.GetPropertyBlock(_propertyBlock);
             Color color = canPlace ? Color.green : Color.red;
-            _propertyBlock.SetColor("_Color",color);
+            _propertyBlock.SetColor("_Color", color);
             _surfaceRenderer.SetPropertyBlock(_propertyBlock);
         }
+
         public virtual List<Vector2Int> GetBuildingGridPointList(Vector2Int center)
         {
             List<Vector2Int> gridPointList = new List<Vector2Int>();
@@ -97,6 +103,7 @@ namespace Game.Components.BuildingSystem.Buildings
             }
             return gridPointList;
         }
+
         public void OnSelect()
         {
             if (Available)

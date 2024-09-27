@@ -16,15 +16,17 @@ namespace Game.Components.SoldierSystem.Units
     public class SoldierBase : MonoBehaviour, IHittable, IMilitaryUnit
     {
         [SerializeField] private int _damage;
+        [SerializeField] private ParticleSystem _hitParticle;
         private int _health;
+        private int _currentNodeIndex;
         private Barracks _currentBarracks;
+        private Node _stayedNode;
         private IDisposable _movementUpdate;
         private IDisposable _attackTimer;
-        private int _currentNodeIndex;
         private IHittable _currentHitTarget;
-        private List<Node> _path = new();
         private IProduct _properties;
-        private Node _stayedNode;
+        private List<Node> _path = new();
+
         public void Initialize(IProduct product, Barracks barracks)
         {
             _properties = product;
@@ -34,20 +36,43 @@ namespace Game.Components.SoldierSystem.Units
             TrySetStayedNodeWalkable(false);
             _currentBarracks = barracks;
         }
-        
+
+        #region IHittable Properties
+
         public int Health => _health;
-        #region IGridObject Properties
+
+        public void OnHit(int damage)
+        {
+            _hitParticle.Play();
+            _health -= _damage;
+            if (_health <= 0)
+                OnDestroyed();
+        }
+
+        public void OnDestroyed()
+        {
+            _attackTimer?.Dispose();
+            _movementUpdate?.Dispose();
+            TrySetStayedNodeWalkable(true);
+            _currentBarracks?.ClearSoldier();
+            _currentBarracks = null;
+            MonoPool.Instance.ReturnToPool(_properties.ProductName, gameObject);
+        }
+
+        #endregion
+
+        #region IMilitaryUnit Properties
 
         public bool Available => _movementUpdate == null;
         public Vector2Int Size => Vector2Int.one;
         public Vector3 WorldPosition => transform.position;
+
         public void OnSelect()
         {
         }
 
         public int Damage => _damage;
 
-      
         #endregion
 
         public void MoveAndAttack(IGridObject gridObject)
@@ -55,30 +80,32 @@ namespace Game.Components.SoldierSystem.Units
             _path = PathFinding.Instance.FindPath(transform.position, gridObject.WorldPosition, gridObject);
             if (_path != null)
             {
-               
                 _currentNodeIndex = 0;
                 if (_path.Count == 0)
                 {
                     OnTargetReached();
                     return;
                 }
+
                 //for spawn point stay Unwalkable
                 TrySetStayedNodeWalkable(_currentBarracks == null);
-                
+
                 _currentBarracks?.ClearSoldier();
                 _currentBarracks = null;
-               
+
                 _stayedNode = _path.Last();
                 _attackTimer?.Dispose();
                 _movementUpdate = Observable.EveryUpdate().Subscribe(_ => MoveToTarget());
                 _currentHitTarget = gridObject as IHittable;
             }
         }
+
         private void TrySetStayedNodeWalkable(bool key)
         {
-            if(_stayedNode == null) return;
+            if (_stayedNode == null) return;
             _stayedNode.Walkable = key;
         }
+
         private void MoveToTarget()
         {
             Vector3 targetPosition = _path[_currentNodeIndex].WorldPosition;
@@ -97,14 +124,15 @@ namespace Game.Components.SoldierSystem.Units
         {
             TrySetStayedNodeWalkable(false);
             _movementUpdate?.Dispose();
-            if(_currentHitTarget != null)
+            if (_currentHitTarget != null)
                 InitializeAttack();
         }
 
         private void InitializeAttack()
         {
             _attackTimer?.Dispose();
-            _attackTimer = Observable.Timer(TimeSpan.FromSeconds(GameConstants.AttackInterval)).Repeat().Subscribe(_ => Attack());
+            _attackTimer = Observable.Timer(TimeSpan.FromSeconds(GameConstants.AttackInterval)).Repeat()
+                .Subscribe(_ => Attack());
         }
 
         private void Attack()
@@ -119,20 +147,5 @@ namespace Game.Components.SoldierSystem.Units
                 _currentHitTarget = null;
             }
         }
-        public void OnHit(int damage)
-        {
-            _health -= _damage;
-            if(_health <= 0)
-                OnDestroyed();
-        }
-        
-        public void OnDestroyed()
-        {
-            TrySetStayedNodeWalkable(true);
-            _currentBarracks?.ClearSoldier();
-            _currentBarracks = null;
-            MonoPool.Instance.ReturnToPool(_properties.ProductName,gameObject);
-        }
-        
     }
 }

@@ -14,7 +14,6 @@ namespace Game.Components.BuildingSystem.Buildings
         private SoldierBase _currentSoldier;
         private Vector3 _soldierSpawnPosition;
         private Vector2Int _soldierSpawnPoint;
-        
         public bool CanProduceSoldier => _currentSoldier == null;
         public Vector3 SoldierSpawnPosition => _soldierSpawnPosition;
 
@@ -35,7 +34,7 @@ namespace Game.Components.BuildingSystem.Buildings
         public override List<Vector2Int> GetBuildingGridPointList(Vector2Int center)
         {
             List<Vector2Int> buildingGridPointList = base.GetBuildingGridPointList(center);
-            buildingGridPointList.Add(new Vector2Int(center.x-1, center.y-1));
+            buildingGridPointList.Add(new Vector2Int(center.x - 1, center.y - 1));
             return buildingGridPointList;
         }
 

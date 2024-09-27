@@ -17,8 +17,6 @@ namespace Game.UI.ProductionMenu.Scriptable
         [SerializeField] private bool isMilitaryUnit;
         [SerializeField] private List<ProductionItem> _products = new();
 
-        // IProduct Arayüzü Uygulamaları
-
         #region IProduct Properties
 
         public string ProductName => _productName;

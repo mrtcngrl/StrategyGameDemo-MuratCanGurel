@@ -9,9 +9,10 @@ namespace Game.Controllers
     {
         private IGridObject _firstSelection;
         private IGridObject _secondSelection;
-        
+
         private Camera _camera;
         private Grid _grid;
+
         private void Start()
         {
             _camera = Camera.main;
@@ -22,8 +23,9 @@ namespace Game.Controllers
             if (Input.GetMouseButtonDown(0))
             {
                 _firstSelection = TryGetGridObject(Input.mousePosition);
-                _firstSelection.OnSelect();
+                _firstSelection?.OnSelect();
             }
+
             if (Input.GetMouseButtonDown(1))
             {
                 _secondSelection = TryGetGridObject(Input.mousePosition);
@@ -33,9 +35,7 @@ namespace Game.Controllers
                 }
             }
         }
-        
-        
-        
+
         private void ProcessAttack()
         {
             if (_firstSelection is IMilitaryUnit militaryUnit && _secondSelection is IHittable)
@@ -46,6 +46,7 @@ namespace Game.Controllers
             _firstSelection = null;
             _secondSelection = null;
         }
+
         private IGridObject TryGetGridObject(Vector3 mousePosition)
         {
             Vector2 mousePosition2D = _camera.ScreenToWorldPoint(mousePosition);

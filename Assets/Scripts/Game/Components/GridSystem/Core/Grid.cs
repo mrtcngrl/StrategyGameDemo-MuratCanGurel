@@ -6,31 +6,31 @@ namespace Game.Components.GridSystem.Core
 {
 public class Grid
 {
-    private int width;
-    private int height;
-    private float cellSize;
+    private int _width;
+    private int _height;
+    private float _cellSize;
     public Node[,] nodeArray;
     public Grid(int width, int height, float cellSize)
     {
-        this.width = width;
-        this.height = height;
-        this.cellSize = cellSize;
+        _width = width;
+        _height = height;
+        _cellSize = cellSize;
         CreateNodes();
     }
 
     public Vector3 GetWorldPosition(int x, int y)
     {
-        return new Vector3(x, y) * cellSize;
+        return new Vector3(x, y) * _cellSize;
     }
     private void GetXY(Vector3 worldPosition, out int x, out int y)
     {
-        x = Mathf.FloorToInt(worldPosition.x / cellSize);
-        y = Mathf.FloorToInt(worldPosition.y / cellSize);
+        x = Mathf.FloorToInt(worldPosition.x / _cellSize);
+        y = Mathf.FloorToInt(worldPosition.y / _cellSize);
     }
 
     public void SetValue(int x, int y, bool walkable)
     {
-        if (x >= 0 && y >= 0 && x < width && y < height)
+        if (x >= 0 && y >= 0 && x < _width && y < _height)
         {
             nodeArray[x, y].Walkable = walkable;
         }
@@ -43,7 +43,7 @@ public class Grid
     }
     public bool IsValidGridXY(int x, int y)
     {
-        return x >= 0 && y >= 0 && x < width && y < height;
+        return x >= 0 && y >= 0 && x < _width && y < _height;
     }
 
     public bool IsGridPositionEmpty(int x , int y)
@@ -84,10 +84,10 @@ public class Grid
     
     public void CreateNodes()
     {
-        nodeArray = new Node[width, height];
-        for (int x = 0; x < width; x++)
+        nodeArray = new Node[_width, _height];
+        for (int x = 0; x < _width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < _height; y++)
             {
                 Vector3 worldPosition = GetWorldPosition(x, y);
                 nodeArray[x, y] = new Node(true, worldPosition, new Vector2Int(x,y));
